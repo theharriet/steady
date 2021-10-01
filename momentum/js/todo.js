@@ -4,29 +4,28 @@ const toDoList = document.getElementById("todo-list");
 
 const TODOS_KEY = "todos";
 
-let toDos = [];  //const toDos = [];
-//newTodo가 그려질때마다(paintTodo()) 그 텍스트를 배열에 push
-//handleToDoSubmit에서 paintTodo하기 전에 toDos array를 가져와서 newTodo push
+let toDos = [];  
 
-//local Storage에는 배열 저장불가. only String can be saved.
 function saveToDos(){
-    //localStorage.setItem("todos", toDos);
     localStorage.setItem(TODOS_KEY, JSON.stringify(toDos));
-    // ****JSON.stringify() = 배열이든 object든 다 string으로 만들어줌
-    //이제 localstorage안에 string으로 된 배열이 들어가있음 ex) ["a", "b", "c"]
-    // 그 전에는 a,b,c,.. 단순 텍스트로 들어가있었음
-
 }
 
+//삭제버튼 누르면 local storage도 변경 되는 작업
 function deleteTodo(event){
     const li = event.target.parentElement;
+    //console.log(li.id);
     li.remove();
+    //console.log(typeof li.id); ==> string stirng 끼리는 비교가 안됨 그래서 parse해줘
+    toDos = toDos.filter(toDo => toDo.id !== parseInt(li.id)); //삭제버튼눌린 todo를 제외한 새 array
+    saveToDos(); //새로운 array를 localstorage에 저장
+
 }
 
 function paintToDo(newTodo){
     const li = document.createElement("li");
-    const span = document.createElement("span"); //나중에 button만들어서 삭제하려고 span태그까지 넣어줌
-    span.innerText = newTodo;
+    li.id = newTodo.id; //newTodoObj에 저장된 id를 여기다 저장해서 li 구별하기
+    const span = document.createElement("span");
+    span.innerText = newTodo.text; //object형태로 newTodo를 넘겨받기에 .text
     const button = document.createElement("button");
     button.innerText = "❌";
     button.addEventListener("click", deleteTodo);
@@ -39,33 +38,49 @@ function handleToDoSubmit(event){
     event.preventDefault();
     const newTodo = toDoInput.value;
     toDoInput.value = "";
-
-    toDos.push(newTodo);
-    paintToDo(newTodo);
+    //toDos.push(newTodo); //단순 텍스트가 아닌 object 형태로 push하고 싶음 그래서 아랫줄
+    const newTodoObj = {
+        text: newTodo,
+        id: Date.now() //랜덤숫자
+    }
+    toDos.push(newTodoObj); //toDos 배열에 텍스트말고 object넘겨줌
+    paintToDo(newTodoObj); //newTodo string이 아닌 위에서 만든 object로 넘겨줌
     saveToDos();
 }
 
 toDoForm.addEventListener("submit", handleToDoSubmit);
 
-//로컬스토리지에서 가져와서 화면에 아직 못 뿌려줌
-//from the local storage에서 JSON.pars 해서 가져올거야
 const savedToDos = localStorage.getItem(TODOS_KEY);
-//console.log(savedToDos);
-if(savedToDos !== null){ //if(savedToDos) => local storage에 todos가 있다면.
-    const parseToDos = JSON.parse(savedToDos); //단순 텍스트를 배열형태로 변환 (object형태?)
-    //console.log(savedToDos);
-    // parseToDos.forEach(sayHello); //array에 있는 각각의 item에 대해 function(sayHello)을 실행
-    //sayHello function 만드는 대신에
-    //parseToDos.forEach((item) => console.log("this is the turn of ", item));
-    // function을 더 짧게 작성하는 방법. (화살표함수)
-    // function sayHello(item){ //JS가 event처럼 제공해주는 argument 정보
-    //     console.log("this is the turn of ", item);
-    // } 똑같
-    
-    //지금 문제는 local storage에 새로고침하고 다시 todos 쓰면 replacing 돼
-    // 이유 -> todos배열 선언할때 빈배열이였고 handletodosubmit에서 빈배열에 push하고있어서
-    // 해결-> application이 시작될 때 todos array를 빈 array가 아닌
-    // const를 let으로 바꿔서 업뎃이 가능하도록 만들어 
-    toDos = parseToDos; // 이전 배열을 저장하고 있는 array로 변경하고
-    parseToDos.forEach(paintToDo); //paintToDo 실행
+
+if(savedToDos !== null){ 
+    const parseToDos = JSON.parse(savedToDos); 
+    toDos = parseToDos;
+    parseToDos.forEach(paintToDo); //paintToDo({text:"a", id:1224221}) 이런식으로 진행되고있음
 }
+
+
+//array에서 어떤 아이템을 삭제하고 싶으면 그 아이템이 삭제되는것이 아닌 그 아이템이 제외된 새 array가 만들어짐
+
+// // [예시]
+// function sexyFilter(){ return true/ false}
+// function sexyFilter(item){return item !==3}
+// [다른문제]const arr = ["pizza", "banana", "potato"]
+// function sexyFilter(food){return food !== "banana"}
+// arr.filter(sexyFilter) ===>["pizza", "potato"]
+// [다른문제] const arr = [1234, 5454, 223, 122,45, 6774,335]
+//function sexyFunction(potato){return potato <=1000}
+//arr.filter(sexyFunction) ====> [223, 122, 45, 335]
+//[다른문제]const todos = [{"text":"a","id":1633104937063},{"text":"b","id":1633104941636},{"text":"c","id":1633104942133}]
+//function sexyFilter(todo){return todo.id !==1633104937063}
+//arr.filter(sexyFilter) ====> [{"text":"b","id":1633104941636},{"text":"c","id":1633104942133}]
+
+
+// [1,2,3,4].filter(sexyFilter)
+// //sexyFilter(1) == true / keep the number 1
+// //sexyFilter(2) == true / keep the number 2
+// //sexyFilter(3) == false / not keep the number 3
+// //sexyFilter(4) == true / keep the number 4 
+// .filter는 새 array를 만들어주는데
+// //sexyFilter function은 만약 새 array에도 1,2,3,4를 포함하고 싶으면 true가 리턴해야함
+// // 만약 false를 리턴하면 그 item은 새array에 포함되지 않을거임 (.filter의 역할)
+// 그 이전 array는 그대로 존재.
