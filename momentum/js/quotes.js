@@ -71,5 +71,6 @@ const author = document.querySelector("#quote span:last-child");
 //console.log(quotes[Math.floor(Math.random()*quotes.length)]);
 const todaysQuote = quotes[Math.floor(Math.random()*quotes.length)];
 
+//todaysQuote.quote이 이해가 안가
 quote.innerText = todaysQuote.quote;
 author.innerText = todaysQuote.author;
