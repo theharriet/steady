@@ -12,7 +12,7 @@ function getClock(){
     // //console.log(`${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`);
     // clock.innerText = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
-    //padStart() / padEnd() - 2 or more 자리수 뒤/앞에 공백문자 넣어주는..
+    //padStart() / padEnd() - 2 or more 자리수 뒤/앞에 공백을 문자로 채워주는 함수
     const date = new Date();
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
