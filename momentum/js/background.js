@@ -1,5 +1,6 @@
 const images = ["0.jpeg", "1.jpeg", "2.jpeg"];
 
+//chosenImage라는 변수에 이미지배열[랜덤한인덱스] 저장
 const chosenImage = images[Math.floor(Math.random() * images.length)];
 
 console.log(chosenImage);
