@@ -4,6 +4,8 @@ const toDoList = document.getElementById("todo-list");
 
 const TODOS_KEY = "todos";
 
+//const toDos 였는데 계속 초기화되는 문제 때문에 let으로 바꿔주고 업데이트를 다른곳에서
+//할 수 있게끔 한다.
 let toDos = [];  
 
 function saveToDos(){
