@@ -17,3 +17,16 @@ function deleteTodo(event){
     saveToDos(); //새로운 array를 localstorage에 저장
 
 }
+
+function paintToDo(newTodo){
+    const li = document.createElement("li");
+    li.id = newTodo.id; //newTodoObj에 저장된 id를 여기다 저장해서 li 구별하기
+    const span = document.createElement("span");
+    span.innerText = newTodo.text; //object형태로 newTodo를 넘겨받기에 .text
+    const button = document.createElement("button");
+    button.innerText = "❌";
+    button.addEventListener("click", deleteTodo);
+    li.appendChild(span);
+    li.appendChild(button);
+    toDoList.appendChild(li);
+}
