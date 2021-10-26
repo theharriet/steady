@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    Hello <%= locals.text || "Default" %> 
+    <%= 2 + 2 %>
+     <!--  <%=  %> hey, we're starting to run some code on the server, 
+        = means output on the page -->
+
+     <!-- <%= text %> : 만약 server.js에 랜더링 되고 있는게 text23432면 text를 못찾아서 
+        페이지가 아예 에러뜨는데 그럴땐 차라리 locals.text 해주면 text가 안나오면 안나왔지 에러는 안뜸
+    서버에서 보낸 텍스트를 인덱스에 그랩할수있게해줌 이름을 몰라도...? 아닌감-->
+
+    </body>
+</html>
