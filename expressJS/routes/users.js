@@ -7,17 +7,29 @@ router.use(logger)
 
 // http://localhost:3000/users
 router.get("/", (req, res) => {
+    console.log(req.query.name) //주소창에 http://localhost:3000/users?name=Kyle 넣으면 터미널에 kyle뜸
     res.send("User List")
  })
 
  // http://localhost:3000/users/new
  // 얘가 /:id보다 아래에 있으면 /new도 /:id로 뜸. 코드를 위에서부터 읽기때문에.
 router.get("/new", (req, res) => {
-    res.send("User New Form")
+    // res.render("users/new", { firstName: "Test"})
+    res.render("users/new")
  })
 
 router.post("/", (req, res) =>{
-    res.send("Create User")
+    //res.send("Create User")
+    const isValid = false
+    if (isValid){
+        users.push({ firstName: req.body.firstName })
+        res.redirect(`/users/${users.length - 1}`)
+    }else {
+        console.log("Error")
+        res.render("users/new", { firstName: req.body.firstName })
+    }
+    //console.log(req.body.firstName)
+    //res.send("Hi")
 })
 
 //아래 세개의 router랑 exactly same
